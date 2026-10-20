@@ -1,0 +1,58 @@
+[
+    {
+        "codigo": "C001",
+        "nombre": "Hamburguesa",
+        "precio": 8000,
+        "tipo": "Comida rápida",
+        "stock": 10
+    },
+    {
+        "codigo": "C002",
+        "nombre": "Pizza",
+        "precio": 12000,
+        "tipo": "Comida rápida",
+        "stock": 5
+    },
+    {
+        "codigo": "C003",
+        "nombre": "Perro caliente",
+        "precio": 6000,
+        "tipo": "Comida rápida",
+        "stock": 3
+    },
+    {
+        "codigo": "C004",
+        "nombre": "Salchipapa",
+        "precio": 9000,
+        "tipo": "Comida rápida",
+        "stock": 2
+    },
+    {
+        "codigo": "B001",
+        "nombre": "Gaseosa Cola 400ml",
+        "precio": 3000,
+        "tipo": "Bebida",
+        "stock": 25
+    },
+    {
+        "codigo": "B002",
+        "nombre": "Jugo de naranja",
+        "precio": 4500,
+        "tipo": "Bebida",
+        "stock": 8
+    },
+    {
+        "codigo": "B003",
+        "nombre": "Agua mineral",
+        "precio": 2500,
+        "tipo": "Bebida",
+        "stock": 1
+    },
+    {
+        "codigo": "B004",
+        "nombre": "Limonada natural",
+        "precio": 4000,
+        "tipo": "Bebida",
+        "stock": 12
+    }
+]
