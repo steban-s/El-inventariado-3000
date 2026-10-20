@@ -1,43 +1,56 @@
-import asyncio
-from database import crear_producto, eliminar_producto, vender_producto, alertas
+from fastapi import FastAPI, HTTPException
+from comida import (leer_base_datos, obtener_categorias, buscar_por_nombre, obtener_stock_critico)
 
-async def venta(codigo, cantidad):
+
+app = FastAPI(
+    title="api inventarios Sena",
+    description="mi primera chamba",
+    version="1.0.0"
+)
+
+@app.get("/")
+async def ruta_principal():
+    return {"mensaje": "Bienvenido a mi primera chamba"}
+
+@app.get("/estado")
+async def estado_servidor():
+    return {"status": "en linea", "servicios": "operativos"}
+
+@app.get("/suma")
+async def sumaxd():
+    tres = 3
+    dos = 2
+    return {"resultado": tres + dos}
+
+@app.get("/productos")
+async def listar_productos():
+    datos = await leer_base_datos()
+    return datos 
+
+@app.get("/producto/{codigo_producto}")
+async def buscar_un_producto(codigo_producto: str):
     try:
-        resultado = await vender_producto(codigo, cantidad)
-        print(f"Venta exitosa: {resultado}")
-    except KeyError as e:
-        print(f"Error: {e}")
-    except ValueError as e:
-        print(f"Error: {e}")
-
-async def prueba_de_estres():
-    print("--- Iniciando prueba ---")
-
-    for codigo in ("P001", "P002", "P003"):
-        try:
-            await eliminar_producto(codigo)
-        except KeyError:
-            pass
-
-    try:
-        await asyncio.gather(
-            crear_producto("P001", "Pizza Hawaiana", 10),
-            crear_producto("P002", "Pizza Pepperoni", 5),
-            crear_producto("P003", "Pizza Margarita", 4),
-        )
-        print("Productos creados exitosamente")
+        datos = await leer_base_datos()
+        for dato in datos:
+            if dato["codigo"] == codigo_producto:
+                return dato
+            raise KeyError("Producto no encontrado")
+        
     except Exception as e:
-        print(f"Error de creación: {e}")
+        raise HTTPException(status_code=404, detail=f"Producto {codigo_producto} no encontrado")
+      
 
-    print("\nProcesando 4 ventas simultáneas...")
-    await asyncio.gather(
-        venta("P001", 2),
-        venta("P002", 3),
-        venta("P003", 10),
-        venta("P999", 1),
-    )
 
-    if alertas:
-        await asyncio.gather(*alertas)
+@app.get("/categorias")
+async def listar_categorias():
+    return await obtener_categorias()
 
-asyncio.run(prueba_de_estres())
+
+@app.get("/alertas/stock")
+async def alertas_stock():
+    return await obtener_stock_critico()
+
+
+@app.get("/productos/buscar/{palabra_clave}")
+async def buscar_productos(palabra_clave: str):
+    return await buscar_por_nombre(palabra_clave)
