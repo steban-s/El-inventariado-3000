@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, field_validator
 from typing import Optional
 
 # Lo que entra cuando llega la moto
@@ -25,6 +25,11 @@ class OrdenPatch(BaseModel):
     nuevo_estado: Optional[str] = Field(None, description="Ej: En diagnóstico, Reparada, Entregada")
     costo_reparacion: Optional[float] = Field(None, ge=0)
     falla_reportada: Optional[str] = None
+    mano_obra: Optional[float] = Field(None, ge=0)
+    @field_validator("nuevo_estado")
+    @classmethod
+    def normalizar_estado(cls, v):
+        return v.capitalize() if v else v
 
 class MecanicoResumen(BaseModel):
     id: int
